@@ -11,12 +11,12 @@ This app serves as a demo exploring:
 
 Features:
 - 🏁 Returns responses with low latency, typically 1 second by utilizing streaming.
-- ❗️ Allows the user to interrupt the GPT assistant and ask a different question.
+- ❗️ Allows the user to tweak the promt via Airtable to build different use cases.
 - 📔 Maintains chat history with GPT.
-- 🛠️ Allows the GPT to call external tools, currently support 
- - getWeather from openweathermap
- - changeLanguage during the conversation 
- - placeOrder(simulate confirm and send SMS)
+- 🛠️ Allows the GPT to call external tools, currently support:
+	- getWeather from openweathermap
+ 	- changeLanguage during the conversation 
+ 	- placeOrder(simulate confirm and send SMS)
 
 ## Setting up for Development
 
@@ -38,8 +38,6 @@ Ngrok will give you a unique URL, like `abc123.ngrok.io`. Copy the URL without h
 ### 2. Configure Environment Variables
 Copy `.env.example` to `.env` and configure the following environment variables:
 
-
-
 ### 3. Install Dependencies with NPM
 Install the necessary packages:
 
@@ -54,7 +52,13 @@ npm run dev
 ```
 This will start your app using `nodemon` so that any changes to your code automatically refreshes and restarts the server.
 
-### 5. Configure an Incoming Phone Number
+### 5. Configure Airtable
+Copy the table below to your own space, or create table with the same fields.
+https://airtable.com/invite/l?inviteId=invAkg4f3o1cMSrxJ&inviteToken=3771dcc18f1dca0f08509981b7ce1365da21685b848728d41c14a1134eeb1c8b&utm_medium=email&utm_source=product_team&utm_content=transactional-alerts
+
+
+
+### 6. Configure an Incoming Phone Number
 
 Connect a phone number using the [Twilio Console](https://console.twilio.com/us1/develop/phone-numbers/manage/incoming).
 
@@ -71,6 +75,7 @@ This configuration tells Twilio to send incoming call audio to your app when som
 - Or you can tweak the prompt and some other options via Airtable. (todo)
 
 
+## Deploying to Fly.io 
 > Deploying to Fly.io is not required to try the app, but can be helpful if your home internet speed is variable.
 
 Modify the app name `fly.toml` to be a unique value (this must be globally unique).
