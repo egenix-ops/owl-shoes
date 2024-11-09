@@ -45,7 +45,24 @@ You can add a new record with your own prompt. The most recently updated record 
 
 ![Airtable Sample](images/airtable-sample.png)
 
-### 4. Configure an Incoming Phone Number
+
+
+### 4. Start Ngrok
+Start an [ngrok](https://ngrok.com) tunnel for port `3000`:
+
+```bash
+ngrok http 3000
+```
+Ngrok will give you a unique URL, like `abc123.ngrok.io`. Copy the URL without http:// or https://, set this for 'SERVER' in your .env.
+
+### 5. Start Your Server in Development Mode
+Run the following command:
+```bash
+npm run dev
+```
+This will start your app using `nodemon` so that any changes to your code automatically refreshes and restarts the server.
+
+### 6. Configure an Incoming Phone Number
 
 Connect a phone number using the [Twilio Console](https://console.twilio.com/us1/develop/phone-numbers/manage/incoming).
 
@@ -56,20 +73,6 @@ twilio phone-numbers:update +1[your-twilio-number] --voice-url=https://your-serv
 ```
 This configuration tells Twilio to send incoming call audio to your app when someone calls your number. The app responds to the incoming call webhook with a [Stream](https://www.twilio.com/docs/voice/twiml/stream) TwiML verb that will connect an audio media stream to your websocket server.
 
-### 5. Start Ngrok
-Start an [ngrok](https://ngrok.com) tunnel for port `3000`:
-
-```bash
-ngrok http 3000
-```
-Ngrok will give you a unique URL, like `abc123.ngrok.io`. Copy the URL without http:// or https://, set this for 'SERVER' in your .env.
-
-### 6. Start Your Server in Development Mode
-Run the following command:
-```bash
-npm run dev
-```
-This will start your app using `nodemon` so that any changes to your code automatically refreshes and restarts the server.
 
 ## Modifying the ChatGPT Context & Prompt
 - You can use local prompt from prompt.js.
