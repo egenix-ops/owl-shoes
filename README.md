@@ -36,7 +36,7 @@ ngrok http 3000
 Ngrok will give you a unique URL, like `abc123.ngrok.io`. Copy the URL without http:// or https://. You'll need this URL in the next step.
 
 ### 2. Configure Environment Variables
-Copy `.env.example` to `.env` and configure the following environment variables:
+Copy `.env.example` to `.env` and configure the environment variables.
 
 ### 3. Install Dependencies with NPM
 Install the necessary packages:
