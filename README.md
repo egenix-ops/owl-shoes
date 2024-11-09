@@ -73,7 +73,7 @@ This will start your app using `nodemon` so that any changes to your code automa
 
 ## Modifying the ChatGPT Context & Prompt
 - You can use local prompt from prompt.js.
-- You can tweak the prompt and some other options via Airtable, either modify your record directly, or use Airtable form as below.
+- You can tweak the prompt and some other options via Airtable, either modify your record directly, or create and use your Airtable form as below.
 
 ![Airtable Form](images/airtable-form.png)
 
@@ -89,6 +89,7 @@ fly launch
 
 fly deploy
 ```
+Update the 'SERVER' in .env with the fly.io server you get.
 
 Import your secrets from your .env file to your deployed app:
 ```bash
