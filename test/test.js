@@ -1,4 +1,4 @@
-const { getLatestRecord } = require('./services/airtable-service');
+const { getLatestRecord } = require('../services/airtable-service');
 
 async function test() {
     try {
