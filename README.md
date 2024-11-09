@@ -27,38 +27,25 @@ Sign up for the following services and get an API key for each:
 
 If you're hosting the app locally, we also recommend using a tunneling service like [ngrok](https://ngrok.com) so that Twilio can forward audio to your app.
 
-### 1. Start Ngrok
-Start an [ngrok](https://ngrok.com) tunnel for port `3000`:
+### 1. Configure Environment Variables
+Copy `.env.example` to `.env` and configure the environment variables.
 
-```bash
-ngrok http 3000
-```
-Ngrok will give you a unique URL, like `abc123.ngrok.io`. Copy the URL without http:// or https://. You'll need this URL in the next step.
-
-### 2. Configure Environment Variables
-Copy `.env.example` to `.env` and configure the following environment variables:
-
-### 3. Install Dependencies with NPM
+### 2. Install Dependencies with NPM
 Install the necessary packages:
 
 ```bash
 npm install
 ```
 
-### 4. Start Your Server in Development Mode
-Run the following command:
-```bash
-npm run dev
-```
-This will start your app using `nodemon` so that any changes to your code automatically refreshes and restarts the server.
+### 3. Configure Airtable
+Copy the table below to your own space, or create table with the same fields highlighted in the red rectangle.
+[Airtable Sample](https://airtable.com/invite/l?inviteId=invAkg4f3o1cMSrxJ&inviteToken=3771dcc18f1dca0f08509981b7ce1365da21685b848728d41c14a1134eeb1c8b&utm_medium=email&utm_source=product_team&utm_content=transactional-alerts)
 
-### 5. Configure Airtable
-Copy the table below to your own space, or create table with the same fields.
-https://airtable.com/invite/l?inviteId=invAkg4f3o1cMSrxJ&inviteToken=3771dcc18f1dca0f08509981b7ce1365da21685b848728d41c14a1134eeb1c8b&utm_medium=email&utm_source=product_team&utm_content=transactional-alerts
+You can add a new record with your own prompt. The most recently updated record will be read when a call is incoming, and the fields in the record will be used to provision Conv-Relay and GPT.
 
+![Airtable Sample](images/airtable-sample.png)
 
-
-### 6. Configure an Incoming Phone Number
+### 4. Configure an Incoming Phone Number
 
 Connect a phone number using the [Twilio Console](https://console.twilio.com/us1/develop/phone-numbers/manage/incoming).
 
@@ -69,10 +56,26 @@ twilio phone-numbers:update +1[your-twilio-number] --voice-url=https://your-serv
 ```
 This configuration tells Twilio to send incoming call audio to your app when someone calls your number. The app responds to the incoming call webhook with a [Stream](https://www.twilio.com/docs/voice/twiml/stream) TwiML verb that will connect an audio media stream to your websocket server.
 
+### 5. Start Ngrok
+Start an [ngrok](https://ngrok.com) tunnel for port `3000`:
+
+```bash
+ngrok http 3000
+```
+Ngrok will give you a unique URL, like `abc123.ngrok.io`. Copy the URL without http:// or https://. You'll need this URL in the next step.
+
+### 6. Start Your Server in Development Mode
+Run the following command:
+```bash
+npm run dev
+```
+This will start your app using `nodemon` so that any changes to your code automatically refreshes and restarts the server.
 
 ## Modifying the ChatGPT Context & Prompt
-- You can use local prompt from prompt.js
-- Or you can tweak the prompt and some other options via Airtable. (todo)
+- You can use local prompt from prompt.js.
+- You can tweak the prompt and some other options via Airtable, either modify your record directly, or use Airtable form as below.
+
+![Airtable Form](images/airtable-form.png)
 
 
 ## Deploying to Fly.io 
