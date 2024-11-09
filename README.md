@@ -14,9 +14,9 @@ Features:
 - ❗️ Allows the user to interrupt the GPT assistant and ask a different question.
 - 📔 Maintains chat history with GPT.
 - 🛠️ Allows the GPT to call external tools, currently support 
- - getWeather from openweathermap
- - changeLanguage during the conversation 
- - placeOrder(simulate confirm and send SMS)
+	- getWeather from openweathermap
+ 	- changeLanguage during the conversation 
+ 	- placeOrder(simulate confirm and send SMS)
 
 ## Setting up for Development
 
