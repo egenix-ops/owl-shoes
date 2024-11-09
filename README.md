@@ -57,6 +57,7 @@ Copy the table below to your own space, or create table with the same fields.
 [Airtable Sample](https://airtable.com/invite/l?inviteId=invAkg4f3o1cMSrxJ&inviteToken=3771dcc18f1dca0f08509981b7ce1365da21685b848728d41c14a1134eeb1c8b&utm_medium=email&utm_source=product_team&utm_content=transactional-alerts)
 
 
+![Airtable Sample](images/airtable-sample.png)
 
 ### 6. Configure an Incoming Phone Number
 
