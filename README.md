@@ -62,7 +62,7 @@ Start an [ngrok](https://ngrok.com) tunnel for port `3000`:
 ```bash
 ngrok http 3000
 ```
-Ngrok will give you a unique URL, like `abc123.ngrok.io`. Copy the URL without http:// or https://. You'll need this URL in the next step.
+Ngrok will give you a unique URL, like `abc123.ngrok.io`. Copy the URL without http:// or https://, set this for 'SERVER' in your .env.
 
 ### 6. Start Your Server in Development Mode
 Run the following command:
