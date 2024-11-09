@@ -75,6 +75,7 @@ This configuration tells Twilio to send incoming call audio to your app when som
 - Or you can tweak the prompt and some other options via Airtable. (todo)
 
 
+## Deploying to Fly.io 
 > Deploying to Fly.io is not required to try the app, but can be helpful if your home internet speed is variable.
 
 Modify the app name `fly.toml` to be a unique value (this must be globally unique).
