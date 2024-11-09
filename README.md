@@ -74,12 +74,14 @@ twilio phone-numbers:update +1[your-twilio-number] --voice-url=https://your-serv
 This configuration tells Twilio to send incoming call audio to your app when someone calls your number. The app responds to the incoming call webhook with a [Stream](https://www.twilio.com/docs/voice/twiml/stream) TwiML verb that will connect an audio media stream to your websocket server.
 
 
-## Modifying the ChatGPT Context & Prompt
-- You can use local prompt from prompt.js.
+### 7. Modifying the ChatGPT Context & Prompt
 - You can tweak the prompt and some other options via Airtable, either modify your record directly, or create and use your Airtable form as below.
 
 ![Airtable Form](images/airtable-form.png)
 
+### 8. Monitor and Logs 
+You can monitor logs at https://you-server-address/monitor
+![ConvRelay-Logs](images/convrelay-logs.png)
 
 ## Deploying to Fly.io 
 > Deploying to Fly.io is not required to try the app, but can be helpful if your home internet speed is variable.
