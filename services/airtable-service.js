@@ -6,7 +6,7 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process
 
 async function getLatestRecord() {
     try {
-        const records = await base('builder').select({
+        let records = await base('builder').select({
             maxRecords: 1,
             sort: [{field: 'Updated', direction: 'desc'}]
         }).firstPage();
@@ -15,7 +15,8 @@ async function getLatestRecord() {
             throw new Error('No records found');
         }
 
-        const record = records[0];
+        let record = records[0];
+        // console.log('getLatestRecord: ', record)
         return {
             sys_prompt: record.get('Prompt') || '',
             profile: record.get('User Profile') || '',
@@ -23,6 +24,7 @@ async function getLatestRecord() {
             inventory: record.get('Inventory') || '',
             example: record.get('Example') || '',
             model: record.get('Model') || '',
+            language: record.get('Language') || '',
             voice: record.get('Voice') || ''
         };
     } catch (error) {

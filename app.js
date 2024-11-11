@@ -60,12 +60,14 @@ app.post('/incoming', async (req, res) => {
     gptService.userContext.push({ 'role': 'system', 'content': record.orders });
     gptService.userContext.push({ 'role': 'system', 'content': record.inventory });
     gptService.userContext.push({ 'role': 'system', 'content': record.example });
+    gptService.userContext.push({ 'role': 'system', 'content': `Use default language ${record.language} for this conversation from now on! Remember it as the default language, even you change language in between. treat en-US and en-GB as different languages.`});
     
-
+    addLog('info', `language : ${record.language}, voice : ${record.voice}`);
+    
     const response = 
     `<Response>
       <Connect>
-        <ConversationRelay url="wss://${process.env.SERVER}/sockets" voice="${record.voice}" language="en-GB"/>
+        <ConversationRelay url="wss://${process.env.SERVER}/sockets" voice="${record.voice}" language="${record.language}"/>
       </Connect>
     </Response>`;
     res.type('text/xml');
