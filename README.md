@@ -41,6 +41,8 @@ npm install
 Copy the table below to your own space, or create table with the same fields highlighted in the red rectangle.
 [Airtable Sample](https://airtable.com/invite/l?inviteId=invAkg4f3o1cMSrxJ&inviteToken=3771dcc18f1dca0f08509981b7ce1365da21685b848728d41c14a1134eeb1c8b&utm_medium=email&utm_source=product_team&utm_content=transactional-alerts)
 
+Make sure the name of your table is 'builder'.
+
 You can add a new record with your own prompt. The most recently updated record will be read when a call is incoming, and the fields in the record will be used to provision Conv-Relay and GPT.
 
 ![Airtable Sample](images/airtable-sample.png)
