@@ -22,6 +22,7 @@ const PORT = process.env.PORT || 3000;
 // Declare global variable
 let gptService; 
 let textService;
+let changeSTT;
 
 // Add this code after creating the Express app
 
@@ -49,7 +50,7 @@ app.post('/incoming', async (req, res) => {
     logs.length = 0; // Clear logs
     addLog('info', 'incoming call started');
     // Get latest record from airtable
-    const record = await getLatestRecord();
+    let record = await getLatestRecord();
     // console.log('Get latest record ', record);
 
     // Initialize GPT service 
@@ -60,14 +61,16 @@ app.post('/incoming', async (req, res) => {
     gptService.userContext.push({ 'role': 'system', 'content': record.orders });
     gptService.userContext.push({ 'role': 'system', 'content': record.inventory });
     gptService.userContext.push({ 'role': 'system', 'content': record.example });
-    gptService.userContext.push({ 'role': 'system', 'content': `Use default language ${record.language} for this conversation from now on! Remember it as the default language, even you change language in between. treat en-US and en-GB as different languages.`});
+    gptService.userContext.push({ 'role': 'system', 'content': `You can speak in many languages, but use default language ${record.language} for this conversation from now on! Remember it as the default language, even you change language in between. treat en-US and en-GB etc. as different languages.`});
     
+    changeSTT = record.changeSTT;
+
     addLog('info', `language : ${record.language}, voice : ${record.voice}`);
     
     const response = 
     `<Response>
       <Connect>
-        <ConversationRelay url="wss://${process.env.SERVER}/sockets" voice="${record.voice}" language="${record.language}"/>
+        <ConversationRelay url="wss://${process.env.SERVER}/sockets" voice="${record.voice}" language="${record.language}" transcriptionProvider="deepgram"/>
       </Connect>
     </Response>`;
     res.type('text/xml');
@@ -132,7 +135,7 @@ app.ws('/sockets', (ws) => {
       addLog('gpt', `Function ${functionName} with args ${functionArgs}`);
       addLog('gpt', `Function Response: ${functionResponse}`);
 
-      if(functionName == 'changeLanguage'){
+      if(functionName == 'changeLanguage' && changeSTT){
         addLog('voxray', `VoxRay ChangeLanguage to: ${functionArgs}`);
         let jsonObj = JSON.parse(functionArgs);
         textService.setLang(jsonObj.language);
