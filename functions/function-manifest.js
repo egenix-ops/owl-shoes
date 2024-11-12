@@ -128,12 +128,12 @@ const tools = [
     type: 'function',
     function: {
       name: "changeLanguage",
-      description: "Change the conversation language to user preference",
+      description: "Change the current conversation language to user preference, treat en-US, en-GB, es-ES, es-MX are different languages.",
       // say: 'Let me check the weather for you.',
       parameters: {
         type: "object",
         properties: {
-          language: { type: "string", description: "The language codes preferred by the user and should be changed to, the format like en-US, fr-FR" },
+          language: { type: "string", description: "The language codes preferred by the user and should be changed to, the format like en-US, fr-FR etc. If the user requests language without specifying the region, default to the system's initial language with region if they are the same." },
         },
         required: ["language"],
       },
