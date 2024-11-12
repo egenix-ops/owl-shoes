@@ -128,7 +128,7 @@ const tools = [
     type: 'function',
     function: {
       name: "changeLanguage",
-      description: "Change the current conversation language to user preference, treat en-US, en-GB, es-ES, es-MX are different languages.",
+      description: "Change the current conversation language to user preference, treat en-US, en-GB, es-ES, es-MX etc. as different languages.",
       // say: 'Let me check the weather for you.',
       parameters: {
         type: "object",

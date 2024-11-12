@@ -25,6 +25,7 @@ async function getLatestRecord() {
             example: record.get('Example') || '',
             model: record.get('Model') || '',
             language: record.get('Language') || '',
+            changeSTT: record.get('SPIChangeSTT') || '',
             voice: record.get('Voice') || ''
         };
     } catch (error) {
