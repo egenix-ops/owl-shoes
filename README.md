@@ -24,6 +24,9 @@ Features:
 Sign up for the following services and get an API key for each:
 - [Airtable](https://www.airtable.com)
 - [OpenAI](https://platform.openai.com/signup)
+- [Twilio](https://www.twilio.com)
+
+You should get your Twilio Account Flag (Voice - Enable Voxray) enabled as well.
 
 If you're hosting the app locally, we also recommend using a tunneling service like [ngrok](https://ngrok.com) so that Twilio can forward audio to your app.
 
