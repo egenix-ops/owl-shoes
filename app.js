@@ -70,7 +70,7 @@ app.post('/incoming', async (req, res) => {
     const response = 
     `<Response>
       <Connect>
-        <ConversationRelay url="wss://${process.env.SERVER}/sockets" voice="${record.voice}" language="${record.language}" transcriptionProvider="deepgram"/>
+        <ConversationRelay url="wss://${process.env.SERVER}/sockets" voice="${record.voice}" language="${record.language}" transcriptionProvider="${record.transcriptionProvider}"/>
       </Connect>
     </Response>`;
     res.type('text/xml');
@@ -90,17 +90,12 @@ app.ws('/sockets', (ws) => {
 
     let interactionCount = 0;
     
-    //test to hot swtich language
-    // gptService.userContext.push({ 'role': 'system', 'content': 'generate the response to fr-FR'});
-    // textService.setLang('en-US' , 'fr-FR');
-
-
     // Incoming from MediaStream
     ws.on('message', function message(data) {
       const msg = JSON.parse(data);
       console.log(msg);
       if (msg.type === 'setup') {
-        addLog('voxray', 'voxray socket setup');
+        addLog('voxray', `voxray socket setup ${msg.callSid}`);
         // callSid = msg.callSid;        
         gptService.setCallInfo('user phone number', msg.from);
 

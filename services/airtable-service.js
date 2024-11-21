@@ -24,8 +24,9 @@ async function getLatestRecord() {
             inventory: record.get('Inventory') || '',
             example: record.get('Example') || '',
             model: record.get('Model') || '',
-            language: record.get('Language') || '',
+            language: record.get('Language') || 'en-US',
             changeSTT: record.get('SPIChangeSTT') || '',
+            transcriptionProvider: record.get('transcriptionProvider') || 'google',
             voice: record.get('Voice') || ''
         };
     } catch (error) {
