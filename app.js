@@ -71,7 +71,9 @@ app.post('/incoming', async (req, res) => {
     `<Response>
       <Connect>
         <ConversationRelay url="wss://${process.env.SERVER}/sockets" voice="${record.voice}" language="${record.language}" transcriptionProvider="${record.transcriptionProvider}"/>
-      </Connect>
+          <Language code="fr-FR" ttsProvider="google" voice="Google.fr-FR-Neural2-B" />
+          <Language code="es-ES" ttsProvider="google" voice="Google.es-ES-Neural2-B" />
+        </Connect>
     </Response>`;
     res.type('text/xml');
     res.end(response.toString());
