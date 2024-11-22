@@ -1,10 +1,10 @@
-# Conv Relay Sample App, Low code with Airtable
+# Conversation Relay Sample App, Low code with Airtable
 
 
-Twilio gives you a superpower called Conv Relay, it provides a Websocket connection, STT and TTS integrated with optimised latency, so you can easily build a voice bot with your own LLM.
+Twilio gives you a superpower called Conversation Relay, it provides a Websocket connection, STT and TTS integrated with optimised latency, so you can easily build a voice bot with your own LLM.
 
 This app serves as a demo exploring:
-- Conv Relay features
+- Conversation Relay features
 - [OpenAI](https://openai.com) for GPT prompt completion
 - Low code options with Airtable, so easy to build different use cases.
 
@@ -25,6 +25,9 @@ Sign up for the following services and get an API key for each:
 - [Airtable](https://www.airtable.com)
 - [OpenAI](https://platform.openai.com/signup)
 - [Twilio](https://www.twilio.com)
+- [Openweathermap](http://api.openweathermap.org)
+
+
 
 You should get your Twilio Account Flag (Voice - Enable Voxray) enabled as well.
 
