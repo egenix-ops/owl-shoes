@@ -1,5 +1,6 @@
 const { Analytics } = require('@segment/analytics-node')
 require('dotenv').config();
+const axios = require('axios');
 
 const profileToken = process.env.PROFILE_TOKEN;
 
@@ -48,6 +49,35 @@ function addEvent(id, ts, order, price, shipment){
   }
 
   console.log("add addEvent done");
+}
+
+function getProfile(id) {
+  
+  const username = profileToken;
+  const password = '';
+  // encode base64
+  const credentials = Buffer.from(`${username}:${password}`).toString('base64');
+
+  // set headers
+  const config = {
+      headers: {
+          'Authorization': `Basic ${credentials}`
+      }
+  };
+
+  console.log('get_profile from segment for id: ' + id);
+
+  // HTTP GET
+  axios.get(`https://profiles.segment.com/v1/spaces/${spaceID}/collections/users/profiles/user_id:${id}/traits`, config)
+      .then(response => {
+          const traits = response.data.traits;
+          console.log(traits);
+          return traits;
+      })
+      .catch(error => {
+          console.error('get_profile error:', error);
+          return '';
+      });
 }
 
 function getEvents(id){
@@ -112,4 +142,6 @@ function readData(jsonData){
 
 // addEvent('8967', '2024-10-22', 'Medium eggplant pizza with sausages and AI sauce', 13, 'Delivery');
 
-getEvents('8967');
+// getEvents('8967');
+
+getProfile('8967');
