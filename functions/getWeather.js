@@ -1,9 +1,12 @@
 const axios = require('axios');
+require('dotenv').config();
+
+const apiKey = process.env.WEATHER_KEY;
 
 async function getWeather(functionArgs) {
   let location = functionArgs.location;
   console.log('GPT -> called getWeather function', location);
-  const apiKey = 'd73ae1d07e4e9e2ddba6ff98f1edf0ce';
+  
   const baseUrl = 'http://api.openweathermap.org/data/2.5/weather';
   const params = { q: location, appid: apiKey, units: 'metric' };
 
