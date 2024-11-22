@@ -71,8 +71,8 @@ app.post('/incoming', async (req, res) => {
     `<Response>
       <Connect>
         <ConversationRelay url="wss://${process.env.SERVER}/sockets" voice="${record.voice}" language="${record.language}" transcriptionProvider="${record.transcriptionProvider}"/>
-          <Language code="fr-FR" ttsProvider="google" voice="Google.fr-FR-Neural2-B" />
-          <Language code="es-ES" ttsProvider="google" voice="Google.es-ES-Neural2-B" />
+          <Language code="fr-FR" ttsProvider="google" voice="fr-FR-Neural2-B" />
+          <Language code="es-ES" ttsProvider="google" voice="es-ES-Neural2-B" />
         </Connect>
     </Response>`;
     res.type('text/xml');
@@ -97,7 +97,7 @@ app.ws('/sockets', (ws) => {
       const msg = JSON.parse(data);
       console.log(msg);
       if (msg.type === 'setup') {
-        addLog('voxray', `voxray socket setup ${msg.callSid}`);
+        addLog('convrelay', `convrelay socket setup ${msg.callSid}`);
         // callSid = msg.callSid;        
         gptService.setCallInfo('user phone number', msg.from);
 
@@ -110,11 +110,11 @@ app.ws('/sockets', (ws) => {
           console.log(`Twilio -> Starting Media Stream for ${callSid}`.underline.red);
         });
       } else if (msg.type === 'prompt') {
-        addLog('voxray', `VoxRay -> GPT (${msg.lang}) :  ${msg.voicePrompt} `);
+        addLog('convrelay', `convrelay -> GPT (${msg.lang}) :  ${msg.voicePrompt} `);
         gptService.completion(msg.voicePrompt, interactionCount);
         interactionCount += 1;
       } else if (msg.type === 'interrupt') {
-        addLog('voxray', 'voxray socket interrupt');
+        addLog('convrelay', 'convrelay socket interrupt');
         gptService.interrupt();
         console.log('Todo: add interruption handling');
       }
@@ -123,7 +123,7 @@ app.ws('/sockets', (ws) => {
     gptService.on('gptreply', async (gptReply, final, icount) => {
       console.log(`Interaction ${icount}: GPT -> TTS: ${gptReply}`.green );
       //addLog('info', gptReply);
-      addLog('gpt', `GPT -> VoxRay: Interaction ${icount}: ${gptReply}`);
+      addLog('gpt', `GPT -> convrelay: Interaction ${icount}: ${gptReply}`);
       textService.sendText(gptReply, final);
     });
 
@@ -133,7 +133,7 @@ app.ws('/sockets', (ws) => {
       addLog('gpt', `Function Response: ${functionResponse}`);
 
       if(functionName == 'changeLanguage' && changeSTT){
-        addLog('voxray', `VoxRay ChangeLanguage to: ${functionArgs}`);
+        addLog('convrelay', `convrelay ChangeLanguage to: ${functionArgs}`);
         let jsonObj = JSON.parse(functionArgs);
         textService.setLang(jsonObj.language);
         // gptService.userContext.push({ 'role': 'assistant', 'content':`change Language to ${functionArgs}`});
