@@ -22,8 +22,7 @@ const PORT = process.env.PORT || 3000;
 // Declare global variable
 let gptService; 
 let textService;
-let changeSTT;
-
+let record;
 // Add this code after creating the Express app
 
 app.get('/monitor', (req, res) => {
@@ -35,6 +34,7 @@ const logs = [];
 
 // Method to add logs
 function addLog(level, message) {
+    console.log(message);
     const timestamp = new Date().toISOString();
     logs.push({ timestamp, level, message });
 }
@@ -49,8 +49,9 @@ app.post('/incoming', async (req, res) => {
   try {
     logs.length = 0; // Clear logs
     addLog('info', 'incoming call started');
+    
     // Get latest record from airtable
-    let record = await getLatestRecord();
+    record = await getLatestRecord();
     // console.log('Get latest record ', record);
 
     // Initialize GPT service 
@@ -63,14 +64,13 @@ app.post('/incoming', async (req, res) => {
     gptService.userContext.push({ 'role': 'system', 'content': record.example });
     gptService.userContext.push({ 'role': 'system', 'content': `You can speak in many languages, but use default language ${record.language} for this conversation from now on! Remember it as the default language, even you change language in between. treat en-US and en-GB etc. as different languages.`});
     
-    changeSTT = record.changeSTT;
 
     addLog('info', `language : ${record.language}, voice : ${record.voice}`);
     
     const response = 
     `<Response>
       <Connect>
-        <ConversationRelay url="wss://${process.env.SERVER}/sockets" voice="${record.voice}" language="${record.language}" transcriptionProvider="${record.transcriptionProvider}">
+        <ConversationRelay url="wss://${process.env.SERVER}/sockets" dtmfDetection="true" voice="${record.voice}" language="${record.language}" transcriptionProvider="${record.transcriptionProvider}">
           <Language code="fr-FR" ttsProvider="google" voice="fr-FR-Neural2-B" />
           <Language code="es-ES" ttsProvider="google" voice="es-ES-Neural2-B" />
         </ConversationRelay>
@@ -99,26 +99,46 @@ app.ws('/sockets', (ws) => {
       console.log(msg);
       if (msg.type === 'setup') {
         addLog('convrelay', `convrelay socket setup ${msg.callSid}`);
-        // callSid = msg.callSid;        
+        callSid = msg.callSid;        
         gptService.setCallInfo('user phone number', msg.from);
 
         //trigger gpt to start 
         gptService.completion('hello', interactionCount);
         interactionCount += 1;
 
-        // Set RECORDING_ENABLED='true' in .env to record calls
+        if(record.recording){
         recordingService(textService, callSid).then(() => {
-          console.log(`Twilio -> Starting Media Stream for ${callSid}`.underline.red);
-        });
-      } else if (msg.type === 'prompt') {
+            console.log(`Twilio -> Starting recording for ${callSid}`.underline.red);
+          });
+        }
+      }  
+      
+      if (msg.type === 'prompt') {
         addLog('convrelay', `convrelay -> GPT (${msg.lang}) :  ${msg.voicePrompt} `);
         gptService.completion(msg.voicePrompt, interactionCount);
         interactionCount += 1;
-      } else if (msg.type === 'interrupt') {
-        addLog('convrelay', 'convrelay socket interrupt');
+      } 
+      
+      if (msg.type === 'interrupt') {
+        addLog('convrelay', 'convrelay interrupt: utteranceUntilInterrupt: ' + msg.utteranceUntilInterrupt + ' durationUntilInterruptMs: ' + msg.durationUntilInterruptMs);
         gptService.interrupt();
-        console.log('Todo: add interruption handling');
+        // console.log('Todo: add interruption handling');
       }
+
+      if (msg.type === 'error') {
+        addLog('convrelay', 'convrelay error: ' + msg.description);
+        
+        console.log('Todo: add error handling');
+      }
+
+      if (msg.type === 'dtmf') {
+        addLog('convrelay', 'convrelay dtmf: ' + msg.digit);
+        
+        console.log('Todo: add dtmf handling');
+      }
+
+
+
     });
       
     gptService.on('gptreply', async (gptReply, final, icount) => {
@@ -133,7 +153,7 @@ app.ws('/sockets', (ws) => {
       addLog('gpt', `Function ${functionName} with args ${functionArgs}`);
       addLog('gpt', `Function Response: ${functionResponse}`);
 
-      if(functionName == 'changeLanguage' && changeSTT){
+      if(functionName == 'changeLanguage' && record.changeSTT){
         addLog('convrelay', `convrelay ChangeLanguage to: ${functionArgs}`);
         let jsonObj = JSON.parse(functionArgs);
         textService.setLang(jsonObj.language);

@@ -1,12 +1,13 @@
 
 require('colors');
+require('dotenv').config();
 
 async function recordingService(textService, callSid) {
   try {
-    if (process.env.RECORDING_ENABLED === 'true') {
+    
       const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
       
-      textService.sendText({partialResponseIndex: null, partialResponse: 'This call will be recorded.'}, 0);
+      // textService.sendText({partialResponseIndex: null, partialResponse: 'This call will be recorded.'}, 0);
       const recording = await client.calls(callSid)
         .recordings
         .create({
@@ -14,7 +15,7 @@ async function recordingService(textService, callSid) {
         });
           
       console.log(`Recording Created: ${recording.sid}`.red);
-    }
+    
   } catch (err) {
     console.log(err);
   }
