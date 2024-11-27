@@ -112,7 +112,7 @@ fly secrets import < .env
 ## Bonus: Use Segment for Personalization
 In this app, user profiles and order history are stored in Airtable and remain static. For dynamic user data, you can use  [Segment](https://segment.com) to store and retrieve profiles and events, such as order summaries. 
 
-Utilize the helper functions in ‘segment-service.js’: use `addUser()` to add a new user profile, and `addEvent()` to log a new order. Once the events are recorded, you can read them with 'getEvents()'and incorporate them into GPT prompts to personalize the conversation.
+Utilize the helper functions in ‘segment-service.js’: use `addUser()` to add a new user profile, and `addEvent()` to log a new order. Once the events are recorded, you can read them with `getEvents()`and incorporate them into GPT prompts to personalize the conversation.
 
 Follow the steps below to set up Segment:
 - Create a HTTP API source and note down the write key
