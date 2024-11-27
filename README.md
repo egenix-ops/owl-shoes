@@ -114,7 +114,12 @@ In this app, user profiles and order history are stored in Airtable and remain s
 
 Utilize the helper functions in ‘segment-service.js’: use `addUser()` to add a new user profile, and `addEvent()` to log a new order. Once the events are recorded, you can read them with `getEvents()`and incorporate them into GPT prompts to personalize the conversation.
 
-Follow the steps below to set up Segment:
+Follow the steps below to set up Segment and update `WRITE_KEY`, `SPACE_ID`, `PROFILE_TOKEN` in .env file.
 - Create a HTTP API source and note down the write key
-- Connect this source in to your profile sources
+![Add Segment Source](images/segment-source.png)
+
+- Connect this source to your profile sources
+![Connect Segment Source](images/connect-source.png)
+
 - Genereate API token for the profile API
+![Segment API Access](images/api-access.png)
