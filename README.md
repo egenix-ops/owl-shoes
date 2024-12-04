@@ -45,6 +45,7 @@ npm install
 
 ### 3. Configure Airtable
 Copy the table below to your own space, or create table with the same fields.
+
 [Airtable Sample](https://airtable.com/appUnia3pFUA5rPlr/shrw1jDP2s53JEuy5)
 
 Make sure the name of your table is 'builder'.
@@ -53,7 +54,7 @@ You can add a new record with your own prompt. The most recently updated record 
 
 ![Airtable Sample](images/airtable-sample.png)
 
-You can generate the Airtable access tokens at the [link](https://airtable.com/create/tokens)
+You can generate Airtable access tokens at the [link](https://airtable.com/create/tokens), and the base ID should be a string similar to 'appUnia3pFUA5rPlr' in your table's URL. Make sure to set both the access token and base ID correctly in your .env file.
 
 ### 4. Start Ngrok
 Start an [ngrok](https://ngrok.com) tunnel for port `3000`:
