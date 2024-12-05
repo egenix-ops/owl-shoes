@@ -92,9 +92,9 @@ This configuration tells Twilio to send incoming call audio to your app when som
 
 In this sample app we prompt it as the Owl Shoes bot to help you find the best shoes. You can easily adjust the bot’s responses by updating records in Airtable. With this no-code option you  can not only tweak the prompt and make your own bot, but also modify the GPT and ConversationRelay parameters.
 
-Edit Prompts: Update the fields in Airtable to modify what the bot says or how it reacts during calls. The last updated record will be loaded.
-Use Airtable Forms: Create a form to allow non-technical team members to add or update prompts easily.
-Change Parameters: Change language and voice settings used by the voice bot.
+- Edit Prompts: Update the fields in Airtable to modify what the bot says or how it reacts during calls. The last updated record will be loaded.
+- Use Airtable Forms: Create a form to allow non-technical team members to add or update prompts easily.
+- Change Parameters: Change language and voice settings used by the voice bot.
 
 You can customize the bot's behavior and user experience using the following fields in the table:
 - Prompt: Defines the bot's role, tasks, and tone.
