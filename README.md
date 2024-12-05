@@ -131,7 +131,8 @@ fly secrets import < .env
 ## Bonus: Creating Effective Prompts for Voice Bots
 A well-designed voice bot goes beyond just delivering information—it creates a natural, engaging, and seamless experience for users. Unlike text-based interactions, voice communication relies heavily on tone, brevity, and adaptability to ensure clarity and connection. These style guidelines are essential to make the bot feel more human, build trust, and enhance user satisfaction, especially in dynamic, real-time conversations.
 Here are the style guidelines used in this application, serving as a foundation for creating your own unique tone and style.
-```bash
+
+```
 Style Guide
 Keep It Voice-Friendly: Responses should be brief, clear, and conversational—avoid visual elements like lists or symbols.
 Use a Warm Tone: Speak in a friendly, relatable manner, using light humor or empathy when appropriate.
@@ -144,7 +145,7 @@ Ensure Smooth Flow: Keep responses natural, role-appropriate, and relevant to ma
 
 In addition to the general style guidelines, specific rules can be set for GPT to tailor responses format perfectly for voice-based conversations, avoiding confusion caused by written conventions. Following response format prompt is used by this app, additional rules can be applied as needed, depending on the language and specific use case, to further refine the response format for voice interactions.
 
-```bash
+```
 Response Format
 Be Conversational: Use natural, spoken language that’s concise and easy to follow.
 Avoid Special Characters: Replace symbols with descriptive words (e.g., "plus" for "+").
