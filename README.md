@@ -46,7 +46,7 @@ npm install
 ### 3. Configure Airtable
 Copy the table below to your own space, or create table with the same fields.
 
-[Airtable Sample](https://airtable.com/appUnia3pFUA5rPlr/shrw1jDP2s53JEuy5)
+[Airtable Sample](https://airtable.com/appM3AimibnEx62us/shrV7vpfm0p7mjcav)
 
 Make sure the name of your table is 'builder'.
 
