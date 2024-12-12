@@ -1,147 +1,189 @@
-const { Analytics } = require('@segment/analytics-node')
-require('dotenv').config();
+const { Analytics } = require('@segment/analytics-node');
 const axios = require('axios');
+require('dotenv').config();
 
 const profileToken = process.env.PROFILE_TOKEN;
-
-// instantiation
+const spaceID = process.env.SPACE_ID;
 const analytics = new Analytics({ writeKey: process.env.WRITE_KEY });
 
-const spaceID = process.env.SPACE_ID;
+const baseURL = 'https://profiles.segment.com/v1';
+// eslint-disable-next-line no-undef
+const credentials = Buffer.from(`${profileToken}:`).toString('base64');
+const config = {
+  headers: {
+    Authorization: `Basic ${credentials}`,
+  },
+};
 
-//add a user
-function addUser(id, name, phone, address){
-
-  console.log("add user start");
-
-  try{
-    analytics.identify({
-      userId: id,
-      traits: {
-        name: name,
-        phone: phone,
-        address: address
-      }
-    });
-  }catch (error) {
-    console.error("Error adding user:", error);
-  }
-
-
-  console.log("add user done");
-}
-
-function addEvent(id, ts, order, price, shipment){
-
-  try{
-    analytics.track({
-      userId: id,
-      event: 'Pizza Ordered',
-      properties: {
-        timestamp:ts,
-        order: order,
-        price: price,
-        shippingMethod: shipment,
-      }
-    });
-  }catch (error) {
-    console.error("Error adding addEvent:", error);
-  }
-
-  console.log("add addEvent done");
-}
-
-function getProfile(id) {
-  
-  const username = profileToken;
-  const password = '';
-  // encode base64
-  const credentials = Buffer.from(`${username}:${password}`).toString('base64');
-
-  // set headers
-  const config = {
-      headers: {
-          'Authorization': `Basic ${credentials}`
-      }
-  };
-
-  console.log('get_profile from segment for id: ' + id);
-
-  // HTTP GET
-  axios.get(`https://profiles.segment.com/v1/spaces/${spaceID}/collections/users/profiles/user_id:${id}/traits`, config)
-      .then(response => {
-          const traits = response.data.traits;
-          console.log(traits);
-          return traits;
-      })
-      .catch(error => {
-          console.error('get_profile error:', error);
-          return '';
-      });
-}
-
-function getEvents(id){
-    const axios = require('axios');
-    const username =  profileToken;
-    const password = '';
-    // encode base64
-    const credentials = Buffer.from(`${username}:${password}`).toString('base64');
-
-    // set headers
-    const config = {
-      headers: {
-        'Authorization': `Basic ${credentials}`
-      }
-    };
-
-    
-    // HTTP GET
-    axios.get(`https://profiles.segment.com/v1/spaces/${spaceID}/collections/users/profiles/user_id:${id}/events`, config)
-      .then(response => {
-        //console.log('Authenticated');
-        //console.log(response.data); 
-        readData(response.data);
-      })
-      .catch(error => {
-        console.log('Error on Authentication');
-        console.error(error); 
-      });
-
-}
-
-function readData(jsonData){
-  
-
+/**
+ * Adds a user by identifying them with either a userId or anonymousId, and optional traits.
+ * At least one of `userId` or `anonymousId` is required. The `traits` object can contain any key-value pair.
+ *
+ * @param {Object} params - The parameters object for adding a user.
+ * @param {string} [params.userId] - The unique identifier for the user. One of `userId` or `anonymousId` is required.
+ * @param {string} [params.anonymousId] - The unique anonymous identifier for the user. One of `userId` or `anonymousId` is required.
+ * @param {Object<string, *>} [params.traits] - An optional object that contains key-value pairs describing additional traits for the user.
+ *
+ * @throws {Error} If neither `userId` nor `anonymousId` is provided.
+ */
+function addUser({ userId, anonymousId, traits }) {
   try {
-    
-    const result = [];
-    
-    jsonData.data.forEach(item => {
-        
-        const extractedData = {
-            timestamp: item.properties.timestamp,
-            order: item.properties.order,
-            // orderID:item.properties.orderID,
-            price: item.properties.price,
-            shippingMethod: item.properties.shippingMethod
-        };
-        
-        result.push(extractedData);
+    if (!userId && !anonymousId) {
+      throw new Error('Either `userId` or `anonymousId` must be provided.');
+    }
+
+    analytics.identify({ userId, anonymousId, traits });
+  } catch (error) {
+    console.error('Error adding user:', error);
+  }
+  console.log('add user done');
+}
+
+/**
+ * Track an event for a user in Segment.its.
+ * At least one of `userId` or `anonymousId` is required. The `properties` object can contain any key-value pair.
+ *
+ * @param {Object} params - The parameters object for adding a user.
+ * @param {string} [params.userId] - The unique identifier for the user. One of `userId` or `anonymousId` is required.
+ * @param {string} [params.anonymousId] - The unique anonymous identifier for the user. One of `userId` or `anonymousId` is required.
+ * @param {string} [params.event] - The name of the event to track.
+ * @param {Object<string, *>} [params.properties] - An optional object that contains key-value pairs describing additional properties for the user.
+ *
+ * @throws {Error} If neither `userId` nor `anonymousId` is provided.
+ */
+function addEvent({ userId, anonymousId, event, properties }) {
+  try {
+    if (!userId && !anonymousId) {
+      throw new Error('Either `userId` or `anonymousId` must be provided.');
+    }
+
+    analytics.track({ userId, anonymousId, event, properties });
+  } catch (error) {
+    console.error('Error adding user:', error);
+  }
+  console.log('add addEvent done');
+}
+
+/**
+ * Fetch the profile data of a user from Segment using their ID.
+ *
+ * @param {string} userId - The unique user ID.
+ * @returns {Promise<Object|null>} - A promise that resolves with the user's traits if successful, or null if there is an error.
+ */
+async function getProfileTraits(userId) {
+  try {
+    const response = await axios.get(
+      `${baseURL}/spaces/${spaceID}/collections/users/profiles/user_id:${userId}/traits`,
+      config
+    );
+
+    const traits = response.data.traits;
+    console.log('getProfile: ', traits);
+
+    return traits;
+  } catch (error) {
+    console.error('get_profile error:', error);
+    return null;
+  }
+}
+
+/**
+ * Fetch the events data of a user from Segment using their ID.
+ *
+ * @param {string} userId - The unique user ID.
+ * @returns {Promise<{data: Array<Object>}|null>} - A promise that resolves with the user's events if successful, or null if there is an error.
+ */
+async function getProfileEvents(userId) {
+  try {
+    const response = await axios.get(
+      `${baseURL}/spaces/${spaceID}/collections/users/profiles/user_id:${userId}/events`,
+      config
+    );
+
+    const data = response.data;
+    console.log('getEvents: ', data);
+
+    return data;
+  } catch (error) {
+    console.error('Error on Authentication or getting events:', error);
+    return null;
+  }
+}
+
+/**
+ * Read and process event data, extracting specified properties from each item.
+ *
+ * @param {Object} jsonData - The raw event data to process.
+ * @param {Array<string>} propertyList - Optional list of property names to extract from each item.
+ * @returns {Array<{event: String, properties: Object}>} - An array of objects containing the extracted properties.
+ */
+function readProperties(jsonData, propertyList = null) {
+  try {
+    const results = [];
+
+    jsonData.data.forEach((item) => {
+      const extractedData = {
+        event: item.event,
+        properties: {},
+      };
+
+      // If no propertyList is provided, add all properties to the extractedData object.
+      if (!propertyList) {
+        extractedData.properties = item.properties;
+        results.push(extractedData);
+      } else {
+        // Loop through the propertyList and extract each property from item.properties.
+        let foundProperty = false;
+        propertyList.forEach((property) => {
+          if (Object.prototype.hasOwnProperty.call(item.properties, property)) {
+            foundProperty = true;
+            extractedData.properties[property] = item.properties[property];
+          }
+        });
+
+        if (foundProperty) {
+          results.push(extractedData);
+        }
+      }
     });
-    
-    
-    console.log(result);
+
+    console.log('readProperties: ', results);
+    return results;
   } catch (error) {
     console.error('Error parsing JSON data:', error);
   }
-
-
 }
 
-// addUser('8967', 'john black', '+491234567', 'Berlin Germany');
+module.exports = {
+  addUser,
+  addEvent,
+  getProfileTraits,
+  getProfileEvents,
+  readProperties,
+};
 
-// addEvent('8967', '2024-10-22', 'Medium eggplant pizza with sausages and AI sauce', 13, 'Delivery');
+/* Example usage:
 
-// getEvents('8967');
+  addUser({
+    userId: '8967',
+    traits: {
+      name: 'John Black',
+      phone: '+491234567',
+      address: 'Berlin, Germany',
+    },
+  });
 
-getProfile('8967');
+  addEvent({
+    userId: '8967',
+    event: 'Order Placed',
+    properties: {
+      order: 'Medium eggplant pizza with sausages and AI sauce',
+      price: 13,
+      shippingMethod: 'Delivery',
+    },
+  });
+
+  await getEvents('8967');
+
+  getProfile('8967');
+*/
