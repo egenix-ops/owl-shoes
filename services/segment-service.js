@@ -16,7 +16,7 @@ const config = {
 };
 
 /**
- * Adds a user by identifying them with either a userId or anonymousId, and optional traits.
+ * Adds user and or updates their traits by identifying them with their userId or anonymousId, plus any optional traits.
  * At least one of `userId` or `anonymousId` is required. The `traits` object can contain any key-value pair.
  *
  * @param {Object} params - The parameters object for adding a user.
@@ -26,7 +26,7 @@ const config = {
  *
  * @throws {Error} If neither `userId` nor `anonymousId` is provided.
  */
-function addUser({ userId, anonymousId, traits }) {
+function upsertUser({ userId, anonymousId, traits }) {
   try {
     if (!userId && !anonymousId) {
       throw new Error('Either `userId` or `anonymousId` must be provided.');
@@ -73,7 +73,9 @@ function addEvent({ userId, anonymousId, event, properties }) {
 async function getProfileTraits(userId) {
   try {
     const response = await axios.get(
-      `${baseURL}/spaces/${spaceID}/collections/users/profiles/user_id:${userId}/traits`,
+      `${baseURL}/spaces/${spaceID}/collections/users/profiles/user_id:${encodeURIComponent(
+        userId
+      )}/traits`,
       config
     );
 
@@ -96,7 +98,9 @@ async function getProfileTraits(userId) {
 async function getProfileEvents(userId) {
   try {
     const response = await axios.get(
-      `${baseURL}/spaces/${spaceID}/collections/users/profiles/user_id:${userId}/events`,
+      `${baseURL}/spaces/${spaceID}/collections/users/profiles/user_id:${encodeURIComponent(
+        userId
+      )}/events`,
       config
     );
 
@@ -155,7 +159,7 @@ function readProperties(jsonData, propertyList = null) {
 }
 
 module.exports = {
-  addUser,
+  upsertUser,
   addEvent,
   getProfileTraits,
   getProfileEvents,
@@ -164,7 +168,7 @@ module.exports = {
 
 /* Example usage:
 
-  addUser({
+  upsertUser({
     userId: '8967',
     traits: {
       name: 'John Black',
