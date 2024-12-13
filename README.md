@@ -1,8 +1,4 @@
-# WIP
-
-
 # Conversation Relay Sample App, Low code with Airtable
-
 
 Twilio gives you a superpower called Conversation Relay, it provides a Websocket connection, STT and TTS integrated with optimised latency, so you can easily build a voice bot with your own LLM.
 
