@@ -79,12 +79,20 @@ async function getProfileTraits(userId) {
       config
     );
 
-    const traits = response.data.traits;
-    console.log('getProfile: ', traits);
+    if (response.data.traits) {
+      const traits = response.data.traits;
+      console.log('getProfileTraits: ', traits);
+      return traits;
+    }
 
-    return traits;
+    return null;
   } catch (error) {
-    console.error('get_profile error:', error);
+    if (error.response.status === 404) {
+      console.log('User not found');
+    } else {
+      console.error('Error Occurred - :', error);
+    }
+
     return null;
   }
 }
@@ -104,12 +112,20 @@ async function getProfileEvents(userId) {
       config
     );
 
-    const data = response.data;
-    console.log('getEvents: ', data);
+    if (response.data) {
+      const data = response.data;
+      console.log('getProfileEvents: ', data);
+      return data;
+    }
 
-    return data;
+    return null;
   } catch (error) {
-    console.error('Error on Authentication or getting events:', error);
+    if (error.response.status === 404) {
+      console.log('User not found');
+    } else {
+      console.error('Error Occurred - :', error);
+    }
+
     return null;
   }
 }
