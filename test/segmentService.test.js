@@ -1,6 +1,6 @@
 const setTimeout = require('timers/promises').setTimeout;
 const {
-  addUser,
+  upsertUser,
   addEvent,
   getProfileTraits,
   getProfileEvents,
@@ -9,10 +9,10 @@ const {
 require('dotenv').config();
 
 const stubbedData = {
-  userId: '123456789',
+  userId: '+1234567890',
   traits: {
     name: 'John Doe',
-    phone: '+123456789',
+    phone: '+1234567890',
     address: '123 Main St',
   },
   event: 'Pizza Ordered',
@@ -26,7 +26,7 @@ const stubbedData = {
 test('Expect A new user to be added and their profile traits retrieved', async () => {
   const { userId, traits, event, properties } = stubbedData;
 
-  addUser({ userId, traits });
+  upsertUser({ userId, traits });
   await setTimeout(15000);
 
   addEvent({ userId, event, properties });
@@ -40,7 +40,7 @@ test('Expect A new user to be added and their profile traits retrieved', async (
 test('Expect new user to be added and their events retrieved - array with objects containing requested properties', async () => {
   const { userId, traits, event, properties } = stubbedData;
 
-  addUser({ userId, traits });
+  upsertUser({ userId, traits });
   await setTimeout(15000);
 
   addEvent({ userId, event, properties });
@@ -62,7 +62,7 @@ test('Expect new user to be added and their events retrieved - array with object
 test('Expect new user to be added and their events retrieved - empty array returned as invalid property is requested', async () => {
   const { userId, traits, event, properties } = stubbedData;
 
-  addUser({ userId, traits });
+  upsertUser({ userId, traits });
   await setTimeout(15000);
 
   addEvent({ userId, event, properties });
