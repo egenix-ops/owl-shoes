@@ -171,3 +171,33 @@ Follow the steps below to set up Segment and update `WRITE_KEY`, `SPACE_ID`, `PR
 
 - Genereate API token for the profile API
 ![Segment API Access](images/api-access.png)
+
+
+### Example
+For examples of all the available functions, check the comment block at the bottom of the `services/segment-service.js` file. This has static values being passed into the functions showing exactly what they expect. Also examining the notes above the functions in the JSDOC should explain the required input / output of each. 
+
+After adding the API keys to the `.env` file, you can test the functions or send data to Segment by running the following command from the root of the package: `npm run test test/segmentService.test.js`   
+*Tip: This method allows you to pass data easily and observe the debugger receiving content and updating a profile.*
+
+In regards to usage in the `app.js` an example of this could be:
+```javascript
+// Inside app.ws('/sockets', (ws) => {...
+    ws.on('message', function message(data) {
+      const msg = JSON.parse(data);
+      console.log(msg);
+
+	  // Segment logic applied here.
+      // Get user profile traits - otherwise we have not seen this user in Segment before.
+      getProfileTraits(msg.from).then((profile) => {
+        if (profile) {
+          // Returns an object similar to the following:
+          // Profile traits: { address: '123 Main St', name: 'John Doe', phone: '+123456789' }
+          console.log('Profile traits:', profile);
+        } else {
+		  // No user found, therefore we add them as a new Segment profile for their next call.
+          upsertUser({ userId: msg.from, traits: { phone: msg.from } });
+        }
+      });
+	...
+}
+```
