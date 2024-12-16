@@ -184,6 +184,7 @@ Follow the steps below to set up Segment and update `WRITE_KEY`, `SPACE_ID`, `PR
 
 # Deploy Flex plugin
 
-cd flex-cr-plugin
-npm install
-twilio flex:plugins:start
+- cd flex-cr-plugin
+- npm install
+- edit .env to add the target workflow sid. You can find it on your Flex Task Assignment TaskRouter Workspace - Workflows.
+- twilio flex:plugins:start
