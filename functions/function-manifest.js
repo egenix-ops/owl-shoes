@@ -139,6 +139,32 @@ const tools = [
       },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'handOff',
+      say: '',
+      description: 'Transfers the call to a live agent.',
+      parameters: {
+        type: 'object',
+        properties: {
+          callSid: {
+            type: 'string',
+            description: 'The unique identifier for the active phone call.',
+          },
+          callSummary: {
+            type: 'string',
+            description: 'The summary of the call before the request to speak to a live agent.',
+          },
+          sentiment: {
+            type: 'string',
+            description: 'The sentiment of the customer before the request to speak to a live agent. This is always a string with one of the following values: positive, negative or neutral.',
+          },
+        },
+        required: ['callSid', 'callSummary', 'sentiment'],
+      }
+    },
+  },
   
 ];
 

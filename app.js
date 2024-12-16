@@ -69,7 +69,7 @@ app.post('/incoming', async (req, res) => {
     
     const response = 
     `<Response>
-      <Connect>
+      <Connect action="${process.env.CR_TO_FLEX}">
         <ConversationRelay url="wss://${process.env.SERVER}/sockets" dtmfDetection="true" voice="${record.voice}" language="${record.language}" transcriptionProvider="${record.transcriptionProvider}">
           <Language code="fr-FR" ttsProvider="google" voice="fr-FR-Neural2-B" />
           <Language code="es-ES" ttsProvider="google" voice="es-ES-Neural2-B" />
@@ -158,6 +158,10 @@ app.ws('/sockets', (ws) => {
         let jsonObj = JSON.parse(functionArgs);
         textService.setLang(jsonObj.language);
         // gptService.userContext.push({ 'role': 'assistant', 'content':`change Language to ${functionArgs}`});
+      }
+      if(functionName == 'handOff' ){
+        addLog('voxray', `VoxRay handing call off ${functionArgs} with handoff`);
+        textService.handOff(functionArgs);
       }
       
     });

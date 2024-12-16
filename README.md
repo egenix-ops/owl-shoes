@@ -1,4 +1,12 @@
-# WIP
+# Deploy serverless function
+
+cd serverless
+copy .env.example to .env and add your account sid / token + target workflow sid on flex.
+
+npm run deploy
+
+Copy the function url i.e. https://serverless-1234-dev.twil.io/conv_relay_to_flex - you will need to set this on Conversation Relay Sample app .env file.
+
 
 # Conversation Relay Sample App, Low code with Airtable
 
@@ -173,3 +181,9 @@ Follow the steps below to set up Segment and update `WRITE_KEY`, `SPACE_ID`, `PR
 
 - Genereate API token for the profile API
 ![Segment API Access](images/api-access.png)
+
+# Deploy Flex plugin
+
+cd flex-cr-plugin
+npm install
+twilio flex:plugins:start

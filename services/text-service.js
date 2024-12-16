@@ -29,6 +29,19 @@ class TextService extends EventEmitter {
     );
 
   }
+  handOff(msg){
+    this.ws.send(
+      JSON.stringify({
+        type: 'end',
+        handoffData: JSON.stringify({
+          reasonCode: "live-agent-handoff",
+          reason: "handoff",
+          callSummary: JSON.parse(msg).callSummary,
+          sentiment: JSON.parse(msg).sentiment,
+        })
+      })
+    );
+  }
 }
 
 module.exports = {TextService};
