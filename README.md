@@ -112,7 +112,7 @@ You can monitor logs at https://you-server-address/monitor
 ## Deploying to Fly.io 
 > Deploying to Fly.io is not required to try the app, but can be helpful if your home internet speed is variable.
 
-Modify the app name `fly.toml` to be a unique value (this must be globally unique).
+Modify the app name in `fly.toml` to be a unique value (this must be globally unique).
 
 Deploy the app using the Fly.io CLI:
 ```bash
