@@ -4,7 +4,6 @@ This plugin demonstrates how to surface data from Conversation Relay in Flex. It
 
 ![alt text](example.png)
 
-TODO: add Conversation Relay instructions.
 
 ## Setup
 
