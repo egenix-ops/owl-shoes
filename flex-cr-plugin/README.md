@@ -1,9 +1,12 @@
 # Flex Conversation Relay Plugin
 
-This plugin demonstrates how to surface data from Conversation Relay in Flex. It will display 3 task attributes in the agent desktop, namely: callSummary, reason and sentiment. This plugin was styled using Twilio Paste. Here's how it looks:
+This plugin demonstrates how to present data from Conversation Relay in Flex when there is a handoff to the contact center. It will display 3 task attributes in the agent desktop, namely: callSummary, reason and sentiment. This plugin was styled using Twilio Paste. Here's how it looks when the call is accepted:
 
-![alt text](example.png)
+![alt text](example-active-call.png)
 
+We can also present these attributes during wrapup.
+
+![alt text](example-wrapup.png)
 
 ## Setup
 
@@ -32,4 +35,3 @@ twilio plugins:install @twilio-labs/plugin-flex
 ## Development
 
 Run `twilio flex:plugins --help` to see all the commands we currently support. For further details on Flex Plugins refer to our documentation on the [Twilio Docs](https://www.twilio.com/docs/flex/developer/plugins/cli) page.
-

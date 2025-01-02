@@ -2,10 +2,9 @@ import React from 'react';
 import { FlexPlugin } from '@twilio/flex-plugin';
 import ConversationRelayComponent from './components/ConversationRelayComponent';
 import { CustomizationProvider } from "@twilio-paste/core/customization";
+const PLUGIN_NAME = 'FlexCrPlugin';
 
-const PLUGIN_NAME = 'FlexCrDemoPlugin';
-
-export default class FlexCrDemoPlugin extends FlexPlugin {
+export default class FlexCrPlugin extends FlexPlugin {
   constructor() {
     super(PLUGIN_NAME);
   }
@@ -17,15 +16,22 @@ export default class FlexCrDemoPlugin extends FlexPlugin {
    * @param flex { typeof import('@twilio/flex-ui') }
    */
   async init(flex, manager) {
-    
+    const options = { sortOrder: -1 };
+
     flex.setProviders({
       PasteThemeProvider: CustomizationProvider
     });
 
-    //add call summary component
+    //add call summary component if there is a call summary 
     flex.CallCanvas.Content.add(<ConversationRelayComponent key="cr-component" />, {
       sortOrder: -1, // Set a low sortOrder value to place it at the top
-      if: (props) => props.task.attributes !== undefined,
+      if: (props) => props.task.attributes.callSummary !== undefined,
+    });
+
+    // Add call summary component to TaskCanvasTabs so it's displayed during wrapup
+    flex.TaskCanvasTabs.Content.add(<ConversationRelayComponent label='Handover Notes' uniqueName="cr-component-wrapup" key="cr-component-wrapup" />, {
+      sortOrder: -1,
+      if: (props) => props.task.status === 'wrapping',
     });
   }
 }
