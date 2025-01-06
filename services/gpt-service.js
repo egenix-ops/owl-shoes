@@ -144,10 +144,8 @@ class GptService extends EventEmitter {
           this.emit('tools', functionName, functionArgs, functionResponse);
           // Step 4: send the info on the function call and function response to GPT
           this.updateUserContext(functionName, 'function', functionResponse);
-          if (!toolData.function.async) {
-            // call the completion function again but pass in the function response to have OpenAI generate a new assistant response
-            await this.completion(functionResponse, interactionCount, 'function', functionName);
-          }
+          // call the completion function again but pass in the function response to have OpenAI generate a new assistant response
+          await this.completion(functionResponse, interactionCount, 'function', functionName);
           
         })
       } 
