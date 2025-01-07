@@ -45,13 +45,18 @@ class GptService extends EventEmitter {
   }
 
   validateFunctionArgs (args) {
+    let argsArray = `[${args}]`
     try {
-      return JSON.parse(args);
+      return JSON.parse(argsArray);
     } catch (error) {
-      console.log('Warning: Double function arguments returned by OpenAI:', args);
-      // Seeing an error where sometimes we have two sets of args
-      if (args.indexOf('{') != args.lastIndexOf('{')) {
-        return JSON.parse(args.substring(args.indexOf(''), args.indexOf('}') + 1));
+      // if we have two function calls we need to conver the string to an array of objects
+      const regex = /\}(?!\s*,)(?=.*\})/g;
+      argsArray = argsArray.replace(regex, '},')
+      try {
+        return JSON.parse(argsArray);
+      } catch (error) {
+        console.log("error parsing function arguments.")
+        return null;
       }
     }
   }
@@ -81,14 +86,14 @@ class GptService extends EventEmitter {
 
     let completeResponse = '';
     let partialResponse = '';
-    let functionName = '';
+    let functionNames = [];
     let functionArgs = '';
     let finishReason = '';
 
     function collectToolInformation(deltas) {
       let name = deltas.tool_calls[0]?.function?.name || '';
       if (name != '') {
-        functionName = name;
+        functionNames.push(name);
       }
       let args = deltas.tool_calls[0]?.function?.arguments || '';
       if (args != '') {
@@ -117,27 +122,32 @@ class GptService extends EventEmitter {
       if (finishReason === 'tool_calls') {
         // parse JSON string of args into JSON object
 
-        const functionToCall = availableFunctions[functionName];
-        const validatedArgs = this.validateFunctionArgs(functionArgs);
-        // console.log('validatedArgs', validatedArgs);
-        
-        // Say a pre-configured message from the function manifest
-        // before running the function.
-        const toolData = tools.find(tool => tool.function.name === functionName);
-        const say = toolData.function.say;
-
-        this.emit('gptreply', say, false, interactionCount);
-
-        let functionResponse = await functionToCall(validatedArgs);
-
-        // console.log('functionResponse', functionResponse)
-        this.emit('tools', functionName, functionArgs, functionResponse);
-
-        // Step 4: send the info on the function call and function response to GPT
-        this.updateUserContext(functionName, 'function', functionResponse);
-        
-        // call the completion function again but pass in the function response to have OpenAI generate a new assistant response
-        await this.completion(functionResponse, interactionCount, 'function', functionName);
+        const validatedArgsArray = this.validateFunctionArgs(functionArgs);
+        console.log(`validatedArgsArray is ${JSON.stringify(validatedArgsArray)}`);
+        let index = 0;
+        functionNames.forEach(async (functionName) => {
+          const functionToCall = availableFunctions[functionName];
+          let functionArgs = validatedArgsArray[index]
+          if (!functionArgs) {
+            console.error(`function args where undefined for ${index}, ${validatedArgsArray}, ${functionName}`)
+            return;
+          }
+          index=index+1;
+          console.log('validatedArgs', functionArgs);
+          // Say a pre-configured message from the function manifest
+          // before running the function.
+          const toolData = tools.find(tool => tool.function.name === functionName);
+          const say = toolData.function.say;
+          this.emit('gptreply', say, false, interactionCount);
+          let functionResponse = await functionToCall(functionArgs);
+          // console.log('functionResponse', functionResponse)
+          this.emit('tools', functionName, functionArgs, functionResponse);
+          // Step 4: send the info on the function call and function response to GPT
+          this.updateUserContext(functionName, 'function', functionResponse);
+          // call the completion function again but pass in the function response to have OpenAI generate a new assistant response
+          await this.completion(functionResponse, interactionCount, 'function', functionName);
+          
+        })
       } 
       else {
         // We use completeResponse for userContext
