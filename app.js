@@ -160,7 +160,7 @@ app.ws('/sockets', (ws) => {
         // gptService.userContext.push({ 'role': 'assistant', 'content':`change Language to ${functionArgs}`});
       }
       if(functionName == 'handOff' ){
-        addLog('voxray', `VoxRay handing call off ${functionArgs} with handoff`);
+        addLog('convrelay', `convrelay handing call off ${functionArgs} with handoff`);
         textService.handOff(functionArgs);
       }
       
