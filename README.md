@@ -27,9 +27,6 @@ Sign up for the following services and get an API key for each:
 - [Openweathermap](http://api.openweathermap.org)
 
 
-
-You should get your Twilio Account Flag (Voice - Enable Conversation Relay) enabled as well.
-
 If you're hosting the app locally, we also recommend using a tunneling service like [ngrok](https://ngrok.com) so that Twilio can forward audio to your app.
 
 ### 1. Configure Environment Variables
