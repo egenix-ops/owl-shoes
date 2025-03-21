@@ -27,9 +27,6 @@ Sign up for the following services and get an API key for each:
 - [Openweathermap](http://api.openweathermap.org)
 
 
-
-You should get your Twilio Account Flag (Voice - Enable Conversation Relay) enabled as well.
-
 If you're hosting the app locally, we also recommend using a tunneling service like [ngrok](https://ngrok.com) so that Twilio can forward audio to your app.
 
 ### 1. Configure Environment Variables
@@ -112,7 +109,7 @@ You can monitor logs at https://you-server-address/monitor
 ## Deploying to Fly.io 
 > Deploying to Fly.io is not required to try the app, but can be helpful if your home internet speed is variable.
 
-Modify the app name `fly.toml` to be a unique value (this must be globally unique).
+Modify the app name in `fly.toml` to be a unique value (this must be globally unique).
 
 Deploy the app using the Fly.io CLI:
 ```bash
