@@ -65,12 +65,12 @@ app.post('/incoming', async (req, res) => {
     gptService.userContext.push({ 'role': 'system', 'content': `You can speak in many languages, but use default language ${record.language} for this conversation from now on! Remember it as the default language, even you change language in between. treat en-US and en-GB etc. as different languages.`});
     
 
-    addLog('info', `language : ${record.language}, voice : ${record.voice}`);
+    addLog('info', `language : ${record.language}, voice : ${record.voice}, ttsProvider : ${record.ttsProvider}, transcriptionProvider : ${record.transcriptionProvider}`, );
     
     const response = 
     `<Response>
       <Connect>
-        <ConversationRelay url="wss://${process.env.SERVER}/sockets" dtmfDetection="true" voice="${record.voice}" language="${record.language}" transcriptionProvider="${record.transcriptionProvider}">
+        <ConversationRelay url="wss://${process.env.SERVER}/sockets" dtmfDetection="true" ttsProvider="${record.ttsProvider}" voice="${record.voice}" language="${record.language}" transcriptionProvider="${record.transcriptionProvider}">
           <Language code="fr-FR" ttsProvider="google" voice="fr-FR-Neural2-B" />
           <Language code="es-ES" ttsProvider="google" voice="es-ES-Neural2-B" />
         </ConversationRelay>

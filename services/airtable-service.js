@@ -28,6 +28,7 @@ async function getLatestRecord() {
             changeSTT: record.get('SPIChangeSTT') || false,
             recording: record.get('Recording') || false,
             transcriptionProvider: record.get('transcriptionProvider') || 'google',
+            ttsProvider: record.get('ttsProvider') || 'google',
             voice: record.get('Voice') || ''
         };
     } catch (error) {
