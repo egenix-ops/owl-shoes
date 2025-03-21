@@ -1,5 +1,6 @@
 const twilio = require('twilio');
 require('dotenv').config();
+const { addEvent } = require('../services/segment-service');
 
 async function placeOrder(functionArgs) {
   const order = functionArgs.order;
@@ -14,18 +15,51 @@ async function placeOrder(functionArgs) {
   const orderNum = Math.floor(Math.random() * (9999999 - 1000000 + 1) + 1000000);
 
   // await new Promise(resolve => setTimeout(resolve, 3000));
+  
+  try{
+    // Send SMS using Twilio
+    client.messages
+      .create({
+        body: `Your order number is ${orderNum}, and the details: ${order}`,
+        from: process.env.FROM_NUMBER,
+        to: number
+      })
+      .then(message => console.log(message.sid))
+      .catch(err => console.error(err));
 
-  // Send SMS using Twilio
-  client.messages
-    .create({
-       body: `Your order number is ${orderNum}, and the details: ${order}`,
-       from: process.env.FROM_NUMBER,
-       to: number
-     })
-    .then(message => console.log(message.sid))
-    .catch(err => console.error(err));
+    // Send WhatsApp message with image
+    await client.messages.create({
+      body: `Your order number is ${orderNum}, and the details: ${order}`,
+      mediaUrl:'https://dms.deckers.com/hoka/image/upload/f_auto,q_40,dpr_2/b_rgb:f7f7f9/w_483/v1703012492/1133957-BLCKB_6.png',
+      from: `whatsapp:${process.env.FROM_NUMBER}`,
+      to: `whatsapp:${number}`
+    });  
+
+    // Send WhatsApp message for feedback
+    await client.messages.create({
+      // body: `Your order number is ${orderNum}, and the details: ${order}`,
+      contentSid:'HXb1d2e23a57adf705ea7b3fde126c04ab',
+      from: `whatsapp:${process.env.FROM_NUMBER}`,
+      to: `whatsapp:${number}`
+    });  
+
+    // // Track order in Segment
+    addEvent({
+      userId: '8967', // using phone number as userId
+      event: 'Order Placed',
+      properties: {
+        orderId: orderNum,
+        order: order,
+        customerPhone: number
+      },
+    });
+  }
+  catch(err){
+    console.log(err);
+  }
   
   return JSON.stringify({ orderNumber: orderNum, message: 'the order is confirmed in the system.' });
 }
+
 
 module.exports = placeOrder;
