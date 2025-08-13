@@ -71,7 +71,7 @@ app.post('/incoming', async (req, res) => {
     `<Response>
       <Connect>
         <ConversationRelay url="wss://${process.env.SERVER}/sockets" dtmfDetection="true" ttsProvider="${record.ttsProvider}" voice="${record.voice}" language="${record.language}" transcriptionProvider="${record.transcriptionProvider}">
-        <Language code="nl-NL" ttsProvider="google" voice="nl-NL-Wavenet-F" />  
+        <Language code="nl-NL" ttsProvider="ElevenLabs" voice="UNBIyLbtFB9k7FKW8wJv" /> 
         <Language code="fr-FR" ttsProvider="google" voice="fr-FR-Neural2-B" />
           <Language code="es-ES" ttsProvider="google" voice="es-ES-Neural2-B" />
         </ConversationRelay>
